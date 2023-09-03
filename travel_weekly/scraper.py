@@ -31,6 +31,19 @@ class TravelWeekly:
         # Simulate pressing the Enter key to submit the search
         search_input.send_keys(Keys.ENTER)
                 
+    def select_hotel_link(self, hotel_name):
+        all_links = self.driver.find_elements(By.TAG_NAME, "a")
+
+        # Define your search query
+        search_query = hotel_name
+
+        # Filter links based on text content similarity
+        matching_links = []
+        for link in all_links:
+            if search_query.lower() in link.text.lower():
+                matching_links.append(link)
+
+        travel_weekly.go_to_page(matching_links[0].get_attribute("href"))
 
 
 def get_hotel_data(url: str) -> dict[str,str]:
@@ -58,13 +71,14 @@ def get_hotel_data(url: str) -> dict[str,str]:
     else:
         return (f"Failed to retrieve content. Status code: {response.status_code}")
 
-    
-
-
 
 if __name__ == '__main__':
     travel_weekly = TravelWeekly()
-    travel_weekly.search_hotels("Market Pavilion Hotel")
+    # travel_weekly.search_hotels("Market Pavilion Hotel")
+    travel_weekly.go_to_page('https://www.travelweekly.com/Hotels/Search?pst=market%20Pavilion%20Hotel&typ=HOT')
+    travel_weekly.select_hotel_link("Market Pavilion Hotel")
+    
+    
     # travel_weekly.go_to_page('https://www.travelweekly.com/Hotels/Charleston/Market-Pavilion-Hotel-p3989887')
     # travel_weekly.get_hotel_data()
 
