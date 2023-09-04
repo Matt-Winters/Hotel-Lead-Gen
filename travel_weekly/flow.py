@@ -12,7 +12,8 @@ def run(hotels: list[Hotel]):
         try:
             tws.select_hotel_link(hotel.name)
         except Exception as e:
-            print(e)
+            print("failed to find Travel Weekly Link")
+            tws.go_to_page(tws.url)
             continue
         data = get_hotel_data(tws.driver.current_url)
         data['rate'] = convert_rates(data.get('rate'))
