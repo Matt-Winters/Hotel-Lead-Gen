@@ -47,6 +47,7 @@ class TravelWeekly:
             if search_query.lower() in link.text.lower():
                 matching_links.append(link)
 
+        # if matching_links:
         self.go_to_page(matching_links[0].get_attribute("href"))
         # standard_room_element = self.driver.find_element(By.CSS_SELECTOR, 'li:contains("Standard Room:")')
         # standard_room_element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'li:contains("Standard Room:")')))

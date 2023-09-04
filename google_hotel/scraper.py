@@ -91,7 +91,7 @@ class GoogleScraper:
     def select_date(self):
         elements = self.driver.find_elements(By.XPATH, '//button[@jsname="a1ZUMe" and @data-delta="1"]')
 
-        for _ in range (4):
+        for _ in range (1):
             for element in reversed(elements):
                 for _ in range(25):
                     element.click()
@@ -145,6 +145,7 @@ if __name__ == '__main__':
     gs.search()
     gs.apply_filters()
     hotels = gs.pull_results()
+    print(hotels)
 
     print('here')
     

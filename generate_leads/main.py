@@ -38,6 +38,7 @@ def run_script(region) -> str:
     return data
 
 if __name__ == '__main__':
+    run_script('charleston')
     from google_hotel.flow import Hotel
     hotels = [Hotel('Market Pavilion Hotel')]
     data = convert_to_csv(hotels)
