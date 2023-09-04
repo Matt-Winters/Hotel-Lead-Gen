@@ -20,7 +20,8 @@ class TravelWeekly:
         self.driver.get(self.url)
         self.wait = WebDriverWait(self.driver, 5)  # Maximum wait time of 10 seconds (adjust as needed)
 
-
+    def quit(self):
+        self.driver.quit()
 
     def go_to_page(self, url: str = 'https://www.travelweekly.com/Hotels') -> None:
         self.driver.get(url)
@@ -69,23 +70,19 @@ def get_hotel_data(url: str) -> dict[str,str]:
         rooms_element = soup.find("td", class_="rooms")
         rate_element = soup.find("td", class_="rates")
 
-        # Find the <li> element with the class "label" containing "Standard Room:"
-        standard_room_element = soup.find("span", class_="label", text="Standard Room:")
-        standard_room = standard_room_element.next_sibling
-
+        
         # Extract the text content from the elements
         rooms = rooms_element.get_text(strip=True)
         rate = rate_element.get_text(strip=True)
 
-        # Extract the "Standard Room" rate
-        standard_room_rate = ""
-        if standard_room_element:
-            standard_room_rate = standard_room_element.find_next("span").get_text(strip=True)
+        if len(rate) > 1:
+            # Find the <li> element with the class "label" containing "Standard Room:"
+            standard_room_element = soup.find("span", class_="label", text="Standard Room:")
+            standard_room_rate = standard_room_element.next_sibling
+        else:
+            standard_room_rate = ""
 
-        # Extract the text content from the <td> element
-        rooms = rooms_element.get_text(strip=True)
-        rate = rate_element.get_text(strip=True)
-        # Print the extracted room number
+
         return {'rooms' : rooms, 'rate' : standard_room_rate}
     else:
         return (f"Failed to retrieve content. Status code: {response.status_code}")
@@ -125,10 +122,11 @@ if __name__ == '__main__':
 
     hotel = 'Market Pavilion Hotel'
 
-    # travel_weekly = TravelWeekly()
-    # # travel_weekly.search_hotels(hotel)
-    # # travel_weekly.select_hotel_link(hotel)
-    # travel_weekly.go_to_page('https://www.travelweekly.com/Hotels/Charleston/Market-Pavilion-Hotel-p3989887')
-    # data = get_hotel_data(travel_weekly.driver.current_url)
+    travel_weekly = TravelWeekly()
+    travel_weekly.search_hotels(hotel)
+    travel_weekly.select_hotel_link(hotel)
+    travel_weekly.go_to_page('https://www.travelweekly.com/Hotels/Charleston/Market-Pavilion-Hotel-p3989887')
+    data = get_hotel_data(travel_weekly.driver.current_url)
+
 
     print('here')
