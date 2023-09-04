@@ -10,7 +10,7 @@
             "env": {
                 "PYTHONPATH": "${workspaceRoot}"
             },
-            "justMyCode": false
+            "justMyCode": true
         },
         {
             "name": "Attach to Python Functions",
