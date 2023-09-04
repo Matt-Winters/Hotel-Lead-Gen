@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import re
 
+from utils import find_best_matching_link
 import requests
 from bs4 import BeautifulSoup
 
@@ -42,17 +43,12 @@ class TravelWeekly:
         search_query = hotel_name
 
         # Filter links based on text content similarity
-        matching_links = []
-        for link in all_links:
-            if search_query.lower() in link.text.lower():
-                matching_links.append(link)
 
+        matching_links = [find_best_matching_link(all_links, search_query)]
+        
         # if matching_links:
         self.go_to_page(matching_links[0].get_attribute("href"))
-        # standard_room_element = self.driver.find_element(By.CSS_SELECTOR, 'li:contains("Standard Room:")')
-        # standard_room_element = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'li:contains("Standard Room:")')))
-        print('here')
-
+        
 
 def get_hotel_data(url: str) -> dict[str,str]:
 
