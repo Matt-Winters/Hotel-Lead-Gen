@@ -49,7 +49,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
         
     except Exception as e:
-        logging.error("Top level failure: returning 500")
+        logging.exception("Top level failure: returning 500")
         return func.HttpResponse(
             str(e),
             status_code=500
