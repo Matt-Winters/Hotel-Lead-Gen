@@ -3,16 +3,17 @@ from google_hotel.flow import Hotel
 from travel_weekly.scraper import TravelWeekly
 from travel_weekly.scraper import get_hotel_data
 from travel_weekly.scraper import convert_rates
+import logging
 
 def run(hotels: list[Hotel]):
     tws = TravelWeekly()
     for hotel in hotels:
-        print(f'Extracting: {hotel.name}')
+        logging.info(f'Extracting: {hotel.name}')
         tws.search_hotels(hotel.name)
         try:
             tws.select_hotel_link(hotel.name)
         except Exception as e:
-            print("failed to find Travel Weekly Link")
+            logging.info("failed to find Travel Weekly Link")
             tws.go_to_page(tws.url)
             continue
         data = get_hotel_data(tws.driver.current_url)
@@ -40,4 +41,4 @@ if __name__ == '__main__':
     hotels = [Hotel(name) for name in hotels]
     # hotels = [Hotel('Mills House Charleston')]
     run(hotels)
-    print('here')
+    logging.info('here')

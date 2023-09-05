@@ -9,6 +9,7 @@ import re
 from utils import find_best_matching_link
 import requests
 from bs4 import BeautifulSoup
+import logging
 
 class TravelWeekly:
     url: str
@@ -126,4 +127,4 @@ if __name__ == '__main__':
     data = get_hotel_data(travel_weekly.driver.current_url)
 
 
-    print('here')
+    logging.info('here')
