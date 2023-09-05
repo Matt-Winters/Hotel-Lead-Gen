@@ -25,7 +25,7 @@ class GoogleScraper:
         # Navigate to the Google Hotels URL
         self.driver = webdriver.Chrome()
         self.driver.get(url)
-        self.wait = WebDriverWait(self.driver, 5)
+        self.wait = WebDriverWait(self.driver, 10)
 
     def quit(self):
         self.driver.quit()
@@ -57,7 +57,7 @@ class GoogleScraper:
         actions.send_keys(Keys.RETURN)
         actions.perform()
 
-        # time.sleep(5)
+        time.sleep(5)
 
         element = self.wait.until(EC.text_to_be_present_in_element((By.XPATH, '//div[@class="GDEAO"]'), self.region))
         self.update_search_results()
@@ -82,6 +82,7 @@ class GoogleScraper:
 
         element = self.wait.until_not(EC.text_to_be_present_in_element((By.XPATH, '//div[@class="GDEAO"]'), search_result))
         self.wait_for_loading()
+        time.sleep(1)
         self.update_search_results()
 
         print("4-5 star filter applied successfully.")

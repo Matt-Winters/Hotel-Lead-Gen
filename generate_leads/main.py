@@ -26,19 +26,33 @@ def convert_to_csv(hotels):
     
     return csv_contents
 
+def convert_to_csv_string(hotels):
+    # Create a header row
+    header = "Name,Rooms,Rate"
+    
+    # Create data rows
+    data_rows = [f"{hotel.name},{hotel.rooms},{hotel.rate}" for hotel in hotels]
+    
+    # Combine header and data rows into a single string
+    csv_string = "\n".join([header] + data_rows)
+    
+    return csv_string
+
 
 def run_script(region) -> str:
 
-    list_of_hotels = google_flow.run(region)
+    list_of_hotels2 = google_flow.run(region)
+
+    list_of_hotels = list_of_hotels2[:5]
 
     list_of_hotels = tw_flow.run(list_of_hotels)
 
-    data = convert_to_csv(list_of_hotels)
+    data = convert_to_csv_string(list_of_hotels)
         
-    return data
+    return list_of_hotels
 
 if __name__ == '__main__':
-    run_script('charleston')
+    data = run_script('charleston')
     from google_hotel.flow import Hotel
     hotels = [Hotel('Market Pavilion Hotel')]
     data = convert_to_csv(hotels)

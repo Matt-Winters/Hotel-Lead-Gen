@@ -19,7 +19,7 @@ class TravelWeekly:
         self.url = r'https://www.travelweekly.com/Hotels'
         self.driver = webdriver.Chrome()
         self.driver.get(self.url)
-        self.wait = WebDriverWait(self.driver, 5)  # Maximum wait time of 10 seconds (adjust as needed)
+        self.wait = WebDriverWait(self.driver, 10)  # Maximum wait time of 10 seconds (adjust as needed)
 
     def quit(self):
         self.driver.quit()
