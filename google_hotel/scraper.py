@@ -7,9 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import re
 import config
-
-# from config import testing
-
+import logging
 import time
 
 class GoogleScraper:
@@ -87,7 +85,7 @@ class GoogleScraper:
         time.sleep(1)
         self.update_search_results()
 
-        print("4-5 star filter applied successfully.")
+        logging.info("4-5 star filter applied successfully.")
         # except Exception as e:
         #     raise(f"Error applying 4-5 star filter: {e}")
 
@@ -148,7 +146,7 @@ if __name__ == '__main__':
     gs.search()
     gs.apply_filters()
     hotels = gs.pull_results()
-    print(hotels)
+    logging.info(hotels)
 
-    print('here')
+    logging.info('here')
     

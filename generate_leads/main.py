@@ -3,6 +3,8 @@ from travel_weekly import flow as tw_flow
 import csv
 import io
 import config
+import logging
+
 
 def convert_to_csv(hotels):
     # Create an in-memory file-like object
@@ -40,13 +42,17 @@ def convert_to_csv_string(hotels):
 
 
 def run_script(region) -> str:
+    logging.info("Running google flow")
     list_of_hotels = google_flow.run(region)
+    logging.info(f"Finished running google flow: Hotels found - {len(list_of_hotels)}")
 
     if config.testing:
         list_of_hotels = list_of_hotels[:3]
+        logging.info(f"testing mode enabled hotels to extract: {len(list_of_hotels)}")
 
+    logging.info('Running Travel Weekly flow')
     list_of_hotels = tw_flow.run(list_of_hotels)
-
+    logging.info('Completed Travel Weekly extraction')
     # data = convert_to_csv_string(list_of_hotels)
         
     return list_of_hotels
@@ -56,4 +62,4 @@ if __name__ == '__main__':
     from google_hotel.flow import Hotel
     hotels = [Hotel('Market Pavilion Hotel')]
     data = convert_to_csv(hotels)
-    print('here')
+    logging.info('here')

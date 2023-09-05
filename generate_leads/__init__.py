@@ -29,12 +29,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     config.testing = testing_param.lower() in ['1', 'true'] if testing_param else False    
     try:
 
-
+        logging.info('starting script')
         hotels_data = run_script(region)
         
+        logging.info('converting to csv')
         # Convert your list of hotels to CSV binary data
         csv_data = convert_to_csv_binary(hotels_data)
-
+        logging.info('csv generated')
         # Set appropriate HTTP headers
         headers = {
             "Content-Disposition": "attachment; filename=hotels.csv",
@@ -48,6 +49,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
         
     except Exception as e:
+        logging.error("Top level failure: returning 500")
         return func.HttpResponse(
             str(e),
             status_code=500
