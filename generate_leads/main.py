@@ -2,7 +2,7 @@ from google_hotel import flow as google_flow
 from travel_weekly import flow as tw_flow
 import csv
 import io
-
+import config
 
 def convert_to_csv(hotels):
     # Create an in-memory file-like object
@@ -40,14 +40,14 @@ def convert_to_csv_string(hotels):
 
 
 def run_script(region) -> str:
+    list_of_hotels = google_flow.run(region)
 
-    list_of_hotels2 = google_flow.run(region)
-
-    list_of_hotels = list_of_hotels2[:5]
+    if config.testing:
+        list_of_hotels = list_of_hotels[:3]
 
     list_of_hotels = tw_flow.run(list_of_hotels)
 
-    data = convert_to_csv_string(list_of_hotels)
+    # data = convert_to_csv_string(list_of_hotels)
         
     return list_of_hotels
 

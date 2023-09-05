@@ -1,11 +1,10 @@
 import logging
-
 import azure.functions as func
-
 from generate_leads.main import run_script
-
+import config
 import csv
 import io
+
 
 def convert_to_csv_binary(hotels):
     # Create a list of dictionaries containing the data
@@ -27,7 +26,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     region = req.params.get("region")
     testing_param = req.params.get('testing')
-    testing = testing_param.lower() == "true" or testing_param == "1" if testing_param else False    
+    config.testing = testing_param.lower() in ['1', 'true'] if testing_param else False    
     try:
 
 

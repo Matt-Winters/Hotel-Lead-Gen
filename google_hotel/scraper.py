@@ -6,7 +6,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import re
+import config
 
+# from config import testing
 
 import time
 
@@ -91,7 +93,7 @@ class GoogleScraper:
 
     def select_date(self):
         elements = self.driver.find_elements(By.XPATH, '//button[@jsname="a1ZUMe" and @data-delta="1"]')
-
+        months = 5 if not config.testing else 1
         for _ in range (1):
             for element in reversed(elements):
                 for _ in range(25):
