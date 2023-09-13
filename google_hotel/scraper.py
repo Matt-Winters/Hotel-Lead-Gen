@@ -76,7 +76,7 @@ class GoogleScraper:
         # search_bar.submit()
         # time.sleep(5)
 
-        element = self.wait.until(EC.text_to_be_present_in_element((By.XPATH, '//div[@class="GDEAO"]'), self.region))
+        self.wait_for_loading()
         self.update_search_results()
 
         # time.sleep(5)
@@ -136,7 +136,7 @@ class GoogleScraper:
         total_sites = int(search_result)
         hotel_names = []
         try_count = 0
-        while len(hotel_names) < total_sites and try_count < 3:
+        while len(hotel_names) < total_sites or try_count < 3:
         # Call the function to scrape the current page
             logging.info(f"total_sites: {total_sites}")
             hotel_names = hotel_names + self.scrape_current_page(len(hotel_names), total_sites)

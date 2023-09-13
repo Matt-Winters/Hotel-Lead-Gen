@@ -22,8 +22,8 @@ def convert_to_csv_binary(hotels):
     return csv_bytes
 
 
-def parse_bool_param(param_value):
-    return param_value.lower() in ['1', 'true'] if param_value else False
+def parse_bool_param(param_value, default=False):
+    return param_value.lower() in ['1', 'true'] if param_value else default
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -34,8 +34,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     headless_param = req.params.get('headless')
     
     config.testing = parse_bool_param(testing_param)
-    config.headless = parse_bool_param(headless_param) 
-        
+    config.headless = parse_bool_param(headless_param, True) 
+
     try:
 
         logging.info('starting script')
