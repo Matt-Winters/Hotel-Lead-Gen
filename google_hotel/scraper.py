@@ -22,8 +22,16 @@ class GoogleScraper:
         url = 'https://www.google.com/travel/search?ts=CAESABoAKgIKAA&ved=0CAAQ5JsGahcKEwjAtrPvzYyBAxUAAAAAHQAAAAAQCw&ictx=3'
     ):
         self.region = region.title()
-        # Navigate to the Google Hotels URL
-        self.driver = webdriver.Chrome()
+        if not config.headless:
+            self.driver = webdriver.Chrome()
+        else:            
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+
+            self.driver = webdriver.Chrome(options=chrome_options)
+        # self.driver = webdriver.Chrome()
         self.driver.get(url)
         self.wait = WebDriverWait(self.driver, 10)
 
@@ -49,15 +57,24 @@ class GoogleScraper:
         # Type something into the search bar
 
         search_bar.clear()
-        search_bar.send_keys(self.region)
+        search_bar.send_keys(self.region + ' hotels')
 
         time.sleep(.1)
 
-        actions = ActionChains(self.driver)
-        actions.send_keys(Keys.RETURN)
-        actions.perform()
+        dropdown_list = self.wait.until(
+            EC.presence_of_element_located((By.CLASS_NAME, "F3AVKd"))
+        )
+        first_item = dropdown_list.find_element(By.XPATH, "//li[@role='option'][1]")
 
-        time.sleep(5)
+        # Click on the first item to select it
+        first_item.click()
+
+
+        # actions = ActionChains(self.driver)
+        # actions.send_keys(Keys.RETURN)
+        # actions.perform()
+        # search_bar.submit()
+        # time.sleep(5)
 
         element = self.wait.until(EC.text_to_be_present_in_element((By.XPATH, '//div[@class="GDEAO"]'), self.region))
         self.update_search_results()
@@ -91,7 +108,7 @@ class GoogleScraper:
 
     def select_date(self):
         elements = self.driver.find_elements(By.XPATH, '//button[@jsname="a1ZUMe" and @data-delta="1"]')
-        months = 5 if not config.testing else 1
+        months = 6 if not config.testing else 1
         for _ in range (1):
             for element in reversed(elements):
                 for _ in range(25):
@@ -118,19 +135,30 @@ class GoogleScraper:
     def pull_results(self):
         total_sites = int(search_result)
         hotel_names = []
-
-        while len(hotel_names) < total_sites:
+        try_count = 0
+        while len(hotel_names) < total_sites and try_count < 3:
         # Call the function to scrape the current page
+            logging.info(f"total_sites: {total_sites}")
             hotel_names = hotel_names + self.scrape_current_page(len(hotel_names), total_sites)
 
             # Check if len(hotel_names) is still less than total_sites
-            if len(hotel_names) < total_sites:
+            logging.info(f"len(hotel_names): {len(hotel_names)}")
                 # Find and click the "next" button to load more results
-                next_button = self.driver.find_element(By.XPATH, "//span[contains(text(), 'Next')]/ancestor::button")
-                next_button.click()            
-                time.sleep(3)
-            else:
-                break
+            try_count = 0
+            while try_count < 3:
+                try:
+                    next_button = self.driver.find_element(By.XPATH, "//span[contains(text(), 'Next')]/ancestor::button")
+                    next_button.click()            
+                    self.wait_for_loading()
+                    break
+
+                except Exception as e:
+                    try_count += 1
+                    logging.info(f"try_count: {try_count}")
+                    if try_count > 3:
+                        break
+                    time.sleep(1)
+           
 
         return hotel_names
 

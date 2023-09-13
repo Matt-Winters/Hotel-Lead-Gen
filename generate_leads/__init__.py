@@ -21,12 +21,21 @@ def convert_to_csv_binary(hotels):
 
     return csv_bytes
 
+
+def parse_bool_param(param_value):
+    return param_value.lower() in ['1', 'true'] if param_value else False
+
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     region = req.params.get("region")
     testing_param = req.params.get('testing')
-    config.testing = testing_param.lower() in ['1', 'true'] if testing_param else False    
+    headless_param = req.params.get('headless')
+    
+    config.testing = parse_bool_param(testing_param)
+    config.headless = parse_bool_param(headless_param) 
+        
     try:
 
         logging.info('starting script')
