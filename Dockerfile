@@ -22,15 +22,15 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
-# 2. Install Chrome driver used by Selenium
-RUN LATEST=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-    wget http://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip && ln -s $PWD/chromedriver /usr/local/bin/chromedriver
+# # 2. Install Chrome driver used by Selenium
+# RUN LATEST=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+#     wget http://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip && \
+#     unzip chromedriver_linux64.zip && ln -s $PWD/chromedriver /usr/local/bin/chromedriver
 
-ENV PATH="/usr/local/bin/chromedriver:${PATH}"
+# ENV PATH="/usr/local/bin/chromedriver:${PATH}"
 
-# 3. Install selenium in Python
-RUN pip install -U selenium
+# # 3. Install selenium in Python
+# RUN pip install -U selenium
 
 # 4. Finally, copy python code to image
 COPY . /home/site/wwwroot

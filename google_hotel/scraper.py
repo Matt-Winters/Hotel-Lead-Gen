@@ -107,7 +107,10 @@ class GoogleScraper:
         #     raise(f"Error applying 4-5 star filter: {e}")
 
     def select_date(self):
-        elements = self.driver.find_elements(By.XPATH, '//button[@jsname="a1ZUMe" and @data-delta="1"]')
+        elements = self.driver.find_elements(
+            By.XPATH, 
+            '//button[@jsname="a1ZUMe" and @data-delta="1"]'
+        )
         months = 6 if not config.testing else 1
         for _ in range (1):
             for element in reversed(elements):
@@ -136,7 +139,7 @@ class GoogleScraper:
         total_sites = int(search_result)
         hotel_names = []
         try_count = 0
-        while len(hotel_names) < total_sites or try_count < 3:
+        while len(hotel_names) < total_sites and try_count < 3:
         # Call the function to scrape the current page
             logging.info(f"total_sites: {total_sites}")
             hotel_names = hotel_names + self.scrape_current_page(len(hotel_names), total_sites)
@@ -145,9 +148,12 @@ class GoogleScraper:
             logging.info(f"len(hotel_names): {len(hotel_names)}")
                 # Find and click the "next" button to load more results
             try_count = 0
-            while try_count < 3:
+            while try_count < 3 and len(hotel_names) < total_sites:
                 try:
-                    next_button = self.driver.find_element(By.XPATH, "//span[contains(text(), 'Next')]/ancestor::button")
+                    next_button = self.driver.find_element(
+                        By.XPATH, 
+                        "//span[contains(text(), 'Next')]/ancestor::button"
+                    )
                     next_button.click()            
                     self.wait_for_loading()
                     break

@@ -10,6 +10,7 @@ from utils import find_best_matching_link
 import requests
 from bs4 import BeautifulSoup
 import logging
+import config
 
 class TravelWeekly:
     url: str
@@ -18,7 +19,15 @@ class TravelWeekly:
 
     def __init__(self) -> None:
         self.url = r'https://www.travelweekly.com/Hotels'
-        self.driver = webdriver.Chrome()
+        if not config.headless:
+            self.driver = webdriver.Chrome()
+        else:            
+            chrome_options = webdriver.ChromeOptions()
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
+
+            self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.get(self.url)
         self.wait = WebDriverWait(self.driver, 10)  # Maximum wait time of 10 seconds (adjust as needed)
 
@@ -29,7 +38,8 @@ class TravelWeekly:
         self.driver.get(url)
 
     def search_hotels(self, hotel_name):
-        search_input = self.driver.find_element(By.ID, "txtHotelSearch")
+        search_input = self.wait.until(EC.presence_of_element_located((By.ID, "txtHotelSearch")))
+        # self.driver.find_element(By.ID, "txtHotelSearch")
 
         # Type the hotel name into the search bar
         search_input.send_keys(hotel_name)
