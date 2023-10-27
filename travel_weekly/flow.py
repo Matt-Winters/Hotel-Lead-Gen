@@ -18,6 +18,8 @@ def run(hotels: list[Hotel]):
             continue
         data = get_hotel_data(tws.driver.current_url)
         data['rate'] = convert_rates(data.get('rate'))
+        if data.get('rooms') and data.get('rate'):
+            data['ef'] = int(data.get('rooms')) * data.get('rate')
         hotel.__dict__.update(data)
         tws.go_to_page(tws.url)
     return hotels

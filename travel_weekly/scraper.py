@@ -80,13 +80,16 @@ def get_hotel_data(url: str) -> dict[str,str]:
 
         
         # Extract the text content from the elements
-        rooms = rooms_element.get_text(strip=True)
-        rate = rate_element.get_text(strip=True)
+        rooms, rate = '', ''
+        if rooms_element:
+            rooms = rooms_element.get_text(strip=True)
+        if rate_element:
+            rate = rate_element.get_text(strip=True)
 
         if len(rate) > 1:
             # Find the <li> element with the class "label" containing "Standard Room:"
             standard_room_element = soup.find("span", class_="label", text="Standard Room:")
-            standard_room_rate = standard_room_element.next_sibling
+            standard_room_rate = standard_room_element.next_sibling if standard_room_element else ""
         else:
             standard_room_rate = ""
 

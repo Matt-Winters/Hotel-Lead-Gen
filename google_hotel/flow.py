@@ -7,6 +7,7 @@ class Hotel:
     name: str
     rooms: int = None
     rate: float = None
+    ef: float = None
 
 def convert_to_list_of_hotels(hotel_names: list[str]) -> list[Hotel]:
     return [Hotel(name) for name in hotel_names]

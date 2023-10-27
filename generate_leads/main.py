@@ -30,7 +30,7 @@ def convert_to_csv(hotels):
 
 def convert_to_csv_string(hotels):
     # Create a header row
-    header = "Name,Rooms,Rate"
+    header = "Name,Rooms,Rate, "
     
     # Create data rows
     data_rows = [f"{hotel.name},{hotel.rooms},{hotel.rate}" for hotel in hotels]
@@ -42,10 +42,10 @@ def convert_to_csv_string(hotels):
 
 def convert_to_csv_file(hotels, filename):
     # Define the CSV file's field names
-    field_names = ["Name", "Rooms", "Rate"]
+    field_names = ["Name", "Rooms", "Rate", "EF Score"]
 
     # Create a list of dictionaries for each hotel
-    hotel_data = [{"Name": hotel.name, "Rooms": hotel.rooms, "Rate": hotel.rate} for hotel in hotels]
+    hotel_data = [{"Name": hotel.name, "Rooms": hotel.rooms, "Rate": hotel.rate, "EF Score": hotel.ef} for hotel in hotels]
 
     # Write the data to a CSV file
     with open(filename, mode="w", newline="") as csv_file:
