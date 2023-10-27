@@ -40,6 +40,20 @@ def convert_to_csv_string(hotels):
     
     return csv_string
 
+def convert_to_csv_file(hotels, filename):
+    # Define the CSV file's field names
+    field_names = ["Name", "Rooms", "Rate"]
+
+    # Create a list of dictionaries for each hotel
+    hotel_data = [{"Name": hotel.name, "Rooms": hotel.rooms, "Rate": hotel.rate} for hotel in hotels]
+
+    # Write the data to a CSV file
+    with open(filename, mode="w", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=field_names)
+        writer.writeheader()  # Write the header row
+        writer.writerows(hotel_data)  # Write the data rows
+
+
 
 def run_script(region) -> str:
     logging.info("Running google flow")
@@ -58,8 +72,11 @@ def run_script(region) -> str:
     return list_of_hotels
 
 if __name__ == '__main__':
-    data = run_script('charleston')
+    region = 'charleston'
+    data = run_script(region)
     from google_hotel.flow import Hotel
-    hotels = [Hotel('Market Pavilion Hotel')]
-    data = convert_to_csv(hotels)
+
+
+    # hotels = [Hotel('Market Pavilion Hotel')]
+    convert_to_csv_file(data, region + ".csv")
     logging.info('here')
