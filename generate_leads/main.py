@@ -4,6 +4,8 @@ import csv
 import io
 import config
 import logging
+from google_sheets import GoogleSheets
+from google_hotel.flow import Hotel
 
 
 def convert_to_csv(hotels):
@@ -53,13 +55,20 @@ def convert_to_csv_file(hotels, filename):
         writer.writeheader()  # Write the header row
         writer.writerows(hotel_data)  # Write the data rows
 
-
-
+def remove_duplicates(list_of_hotels: list[Hotel]):
+    gs = GoogleSheets()
+    contacted_hotels = gs.download_sheet_data('1g9zwbC3w0ROna5k5ybOJtlV2SY_4b4RC-pHDeQSvyT8')
+    for hotel in list_of_hotels.copy():
+        if hotel.name in contacted_hotels:
+            list_of_hotels.remove(hotel)
+    return list_of_hotels
+    
 def run_script(region) -> str:
     logging.info("Running google flow")
     list_of_hotels = google_flow.run(region)
     logging.info(f"Finished running google flow: Hotels found - {len(list_of_hotels)}")
-
+    list_of_hotels2 = remove_duplicates(list_of_hotels)
+    print(f'og list count: {len(list_of_hotels)} - new count: {len(list_of_hotels2)}')
     if config.testing:
         list_of_hotels = list_of_hotels[:3]
         logging.info(f"testing mode enabled hotels to extract: {len(list_of_hotels)}")
@@ -79,4 +88,7 @@ if __name__ == '__main__':
 
     # hotels = [Hotel('Market Pavilion Hotel')]
     convert_to_csv_file(data, region + ".csv")
+    gs = GoogleSheets()
+    gs.upload_csv(region+'.csv', region + ' - scraped data')
+
     logging.info('here')
