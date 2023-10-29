@@ -81,7 +81,7 @@ def run_script(region) -> str:
     return list_of_hotels
 
 if __name__ == '__main__':
-    region = 'charleston'
+    region = 'arizona'
     data = run_script(region)
     from google_hotel.flow import Hotel
 

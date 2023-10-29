@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 *google_secret*
-
+*.csv
 # Distribution / packaging
 .Python
 build/
