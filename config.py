@@ -1,3 +1,3 @@
 
 testing = False
-headless = False
+headless = True
