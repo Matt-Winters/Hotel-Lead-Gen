@@ -34,7 +34,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     headless_param = req.params.get('headless')
     
     config.testing = parse_bool_param(testing_param)
-    config.headless = parse_bool_param(headless_param, True) 
+    config.headless = parse_bool_param(headless_param, False) 
 
     try:
 

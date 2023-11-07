@@ -62,6 +62,15 @@ def remove_duplicates(list_of_hotels: list[Hotel]):
         if hotel.name in contacted_hotels:
             list_of_hotels.remove(hotel)
     return list_of_hotels
+
+def pull_in_hotel_status(list_of_hotels: list[Hotel]):
+    gs = GoogleSheets()
+    contacted_hotels = gs.download_sheet_data('1g9zwbC3w0ROna5k5ybOJtlV2SY_4b4RC-pHDeQSvyT8')
+    # loop through the list of hotels and check if the name is a key in the contacted_hotels dict
+    # if it is, then set the status of the hotel to the status in the dict for that key
+    for hotel in list_of_hotels:
+        if hotel.name in contacted_hotels:
+            hotel.status = contacted_hotels[hotel.name].get('Status', '')
     
 def run_script(region) -> str:
     logging.info("Running google flow")
@@ -81,14 +90,16 @@ def run_script(region) -> str:
     return list_of_hotels
 
 if __name__ == '__main__':
-    region = 'arizona'
-    data = run_script(region)
+    ## region = 'arizona'
+    # data = run_script(region)
+
     from google_hotel.flow import Hotel
 
+    hotels = [Hotel('Market Pavilion Hotel')]
+    pull_in_hotel_status(hotels)
+    print(hotels)
+    # convert_to_csv_file(data, region + ".csv")
+    # gs = GoogleSheets()
+    # gs.upload_csv(region+'.csv', region + ' - scraped data')
 
-    # hotels = [Hotel('Market Pavilion Hotel')]
-    convert_to_csv_file(data, region + ".csv")
-    gs = GoogleSheets()
-    gs.upload_csv(region+'.csv', region + ' - scraped data')
-
-    logging.info('here')
+    # logging.info('here')
